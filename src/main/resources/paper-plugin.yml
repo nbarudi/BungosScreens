@@ -1,0 +1,5 @@
+name: TextMenus
+api-version: "1.21"
+main: ca.bungo.textmenus.TextMenusPlugin
+author: Bungo
+version: 1.0.0
