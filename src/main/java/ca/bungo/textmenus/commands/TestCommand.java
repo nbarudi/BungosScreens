@@ -89,10 +89,11 @@ public class TestCommand extends Command {
             widget.draw();
         }
         else if(args[0].equalsIgnoreCase("rect")){
-            RectangleWidget widget = new RectangleWidget(baseLocation, 10, 10);
+            RectangleWidget widget = new RectangleWidget(baseLocation, 1, 2);
             widgets.add(widget);
             widget.setHorizontalPivot(HorizontalPivot.LEFT);
-            widget.setRectangleRotation(45);
+            widget.setVerticalPivot(VerticalPivot.CENTER);
+            widget.setRectangleRotation(90);
             widget.draw();
         }
 

@@ -60,27 +60,36 @@ public class RectangleWidget implements Widget {
 
         if(horizontalPivot == HorizontalPivot.RIGHT){
             posX += -0.075f * width;
+            posX += (float) (0.075f + (-0.075f * Math.cos(rotation)))*width;
+            posY += (float) (-0.075f/(height/width) * Math.sin(rotation)) * height;
         }
         else if(horizontalPivot == HorizontalPivot.LEFT){
             posX += 0.05f * width;
+            posX += (float) (-0.05f + (0.05f * Math.cos(rotation)))*width;
+            posY += (float) (0.05f/(height/width) * Math.sin(rotation)) * height;
         }
         else {
             posX += -0.01f * width;
+            posX += (float) (0.01f + (-0.01f * Math.cos(rotation)))*width;
+            posY += (float) (-0.01f/(height/width) * Math.sin(rotation)) * height;
         }
 
         if(verticalPivot == VerticalPivot.BOTTOM){
             //posY += -0.075f * width;
             posY += 0;
+            posY += (float) (0 + (-0f * Math.cos(rotation))) * height;
+            posX += (float) (0/(width/height) * Math.sin(rotation)) * width;
         }
         else if(verticalPivot == VerticalPivot.TOP){
             posY += -0.125f*height;
+            posY += (float) (0.125f + (-0.125f * Math.cos(rotation))) * height;
+            posX += (float) (0.125f/(width/height) * Math.sin(rotation)) * width;
         }
         else {
             posY += -0.065f*height;
+            posY += (float) (0.065f + (-0.065f * Math.cos(rotation))) * height;
+            posX += (float) (0.065f/(width/height) * Math.sin(rotation)) * width;
         }
-
-        posX += (float) (-0.05f + (0.05f * Math.cos(rotation)))*width;
-        posY += (float) (0.05f * Math.sin(rotation)) * height;
 
 
         positionOffset.x += posX;
