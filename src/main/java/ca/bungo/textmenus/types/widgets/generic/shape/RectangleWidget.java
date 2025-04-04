@@ -20,10 +20,10 @@ import org.joml.Vector3f;
 public class RectangleWidget implements Widget {
 
     @Setter(AccessLevel.NONE)
-    private TextDisplay textDisplay;
+    protected TextDisplay textDisplay;
 
     @Setter(AccessLevel.NONE)
-    private final Location baseLocation;
+    protected final Location baseLocation;
 
     private float width;
     private float height;
@@ -96,7 +96,7 @@ public class RectangleWidget implements Widget {
         Transformation transformation = new Transformation(
                 positionOffset,
                 new AxisAngle4f(rotation, 0, 0, 1),
-                new Vector3f(width, height/2f, 0),
+                new Vector3f(width, height/2f, 1),
                 new AxisAngle4f()
         );
 

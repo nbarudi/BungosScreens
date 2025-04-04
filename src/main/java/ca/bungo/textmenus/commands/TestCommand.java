@@ -3,39 +3,35 @@ package ca.bungo.textmenus.commands;
 import ca.bungo.textmenus.TextMenusPlugin;
 import ca.bungo.textmenus.types.Widget;
 import ca.bungo.textmenus.types.widgets.HorizontalPivot;
+import ca.bungo.textmenus.types.Interactable;
 import ca.bungo.textmenus.types.widgets.VerticalPivot;
 import ca.bungo.textmenus.types.widgets.generic.ImageWidget;
 import ca.bungo.textmenus.types.widgets.generic.TextWidget;
+import ca.bungo.textmenus.types.widgets.generic.shape.InteractableRectangleWidget;
 import ca.bungo.textmenus.types.widgets.generic.shape.RectangleWidget;
-import ca.bungo.textmenus.types.widgets.generic.shape.SquareWidget;
 import ca.bungo.textmenus.types.widgets.unique.NetworkImageWidget;
 import ca.bungo.textmenus.types.widgets.unique.SkinWidget;
 import ca.bungo.textmenus.utility.GlobalSettings;
-import ca.bungo.textmenus.utility.NetworkUtility;
 import ca.bungo.textmenus.utility.RaycastUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestCommand extends Command {
 
     List<Widget> widgets;
+    List<Widget> raycastPoints;
 
     public TestCommand() {
         super("test");
         widgets = new ArrayList<>();
+        raycastPoints = new ArrayList<>();
     }
 
     @Override
@@ -44,6 +40,7 @@ public class TestCommand extends Command {
         if(args.length == 0) return false;
 
         Location baseLocation = player.getEyeLocation().add(player.getLocation().getDirection().multiply(2));
+        baseLocation.setPitch(0);
         baseLocation.setYaw(baseLocation.getYaw() - 180);
 
         if(args[0].equalsIgnoreCase("spawn")) {
@@ -56,7 +53,11 @@ public class TestCommand extends Command {
             for(Widget widget : widgets) {
                 widget.cleanup();
             }
+            for(Widget widget : raycastPoints) {
+                widget.cleanup();
+            }
             widgets.clear();
+            raycastPoints.clear();
         }
         else if(args[0].equalsIgnoreCase("skin")) {
             SkinWidget widget = new SkinWidget(baseLocation, player.getUniqueId().toString(), true);
@@ -93,22 +94,18 @@ public class TestCommand extends Command {
             widget.draw();
         }
         else if(args[0].equalsIgnoreCase("rect")){
-            RectangleWidget widget = new RectangleWidget(baseLocation, 1, 2);
+            RectangleWidget widget = new InteractableRectangleWidget(baseLocation, 10, 10);
             widgets.add(widget);
-            widget.setHorizontalPivot(HorizontalPivot.LEFT);
-            widget.setVerticalPivot(VerticalPivot.CENTER);
-            widget.setRectangleRotation(90);
+            widget.setRectangleRotation(0);
             widget.draw();
         }
         else if(args[0].equalsIgnoreCase("ray")){
-            RaycastUtil.Ray3f ray = RaycastUtil.getPlayerLookRay(player);
+            //RaycastUtil.Ray3f ray = RaycastUtil.getPlayerLookRay(player);
 
-            for(float i = 0; i < 5; i+= 0.01f){
-                Vector3f pointVec = ray.getPoint(i);
-                Location dotLoc = new Location(baseLocation.getWorld(), pointVec.x, pointVec.y, pointVec.z, baseLocation.getYaw(), -baseLocation.getPitch());
-                SquareWidget widget = new SquareWidget(dotLoc, 0.25f);
-                widgets.add(widget);
-                widget.draw();
+            for(Widget widget : widgets) {
+                if(widget instanceof Interactable interactable) {
+                    if(interactable.isInside(player)) TextMenusPlugin.LOGGER.info("Interactable: {}", interactable);
+                }
             }
 
         }
