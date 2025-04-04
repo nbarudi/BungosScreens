@@ -1,15 +1,18 @@
 package ca.bungo.textmenus.commands;
 
+import ca.bungo.textmenus.TextMenusPlugin;
 import ca.bungo.textmenus.types.Widget;
 import ca.bungo.textmenus.types.widgets.HorizontalPivot;
 import ca.bungo.textmenus.types.widgets.VerticalPivot;
 import ca.bungo.textmenus.types.widgets.generic.ImageWidget;
 import ca.bungo.textmenus.types.widgets.generic.TextWidget;
 import ca.bungo.textmenus.types.widgets.generic.shape.RectangleWidget;
+import ca.bungo.textmenus.types.widgets.generic.shape.SquareWidget;
 import ca.bungo.textmenus.types.widgets.unique.NetworkImageWidget;
 import ca.bungo.textmenus.types.widgets.unique.SkinWidget;
 import ca.bungo.textmenus.utility.GlobalSettings;
 import ca.bungo.textmenus.utility.NetworkUtility;
+import ca.bungo.textmenus.utility.RaycastUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -18,6 +21,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
@@ -95,6 +99,18 @@ public class TestCommand extends Command {
             widget.setVerticalPivot(VerticalPivot.CENTER);
             widget.setRectangleRotation(90);
             widget.draw();
+        }
+        else if(args[0].equalsIgnoreCase("ray")){
+            RaycastUtil.Ray3f ray = RaycastUtil.getPlayerLookRay(player);
+
+            for(float i = 0; i < 5; i+= 0.01f){
+                Vector3f pointVec = ray.getPoint(i);
+                Location dotLoc = new Location(baseLocation.getWorld(), pointVec.x, pointVec.y, pointVec.z, baseLocation.getYaw(), -baseLocation.getPitch());
+                SquareWidget widget = new SquareWidget(dotLoc, 0.25f);
+                widgets.add(widget);
+                widget.draw();
+            }
+
         }
 
 

@@ -19,7 +19,6 @@ import org.joml.Vector3f;
 @Setter
 public class RectangleWidget implements Widget {
 
-    @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private TextDisplay textDisplay;
 
@@ -75,7 +74,6 @@ public class RectangleWidget implements Widget {
         }
 
         if(verticalPivot == VerticalPivot.BOTTOM){
-            //posY += -0.075f * width;
             posY += 0;
             posY += (float) (0 + (-0f * Math.cos(rotation))) * height;
             posX += (float) (0/(width/height) * Math.sin(rotation)) * width;
