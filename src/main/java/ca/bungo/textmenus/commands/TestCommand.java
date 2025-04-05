@@ -2,9 +2,7 @@ package ca.bungo.textmenus.commands;
 
 import ca.bungo.textmenus.TextMenusPlugin;
 import ca.bungo.textmenus.types.Widget;
-import ca.bungo.textmenus.types.widgets.HorizontalPivot;
 import ca.bungo.textmenus.types.Interactable;
-import ca.bungo.textmenus.types.widgets.VerticalPivot;
 import ca.bungo.textmenus.types.widgets.generic.ImageWidget;
 import ca.bungo.textmenus.types.widgets.generic.TextWidget;
 import ca.bungo.textmenus.types.widgets.generic.shape.InteractableRectangleWidget;
@@ -12,13 +10,14 @@ import ca.bungo.textmenus.types.widgets.generic.shape.RectangleWidget;
 import ca.bungo.textmenus.types.widgets.unique.NetworkImageWidget;
 import ca.bungo.textmenus.types.widgets.unique.SkinWidget;
 import ca.bungo.textmenus.utility.GlobalSettings;
-import ca.bungo.textmenus.utility.RaycastUtil;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,9 @@ public class TestCommand extends Command {
 
         Location baseLocation = player.getEyeLocation().add(player.getLocation().getDirection().multiply(2));
         baseLocation.setPitch(0);
-        baseLocation.setYaw(baseLocation.getYaw() - 180);
+        baseLocation.setYaw(player.getYaw() - 180);
+
+
 
         if(args[0].equalsIgnoreCase("spawn")) {
             Color[][] colors = GlobalSettings.getDummyColors(64, 64);
@@ -94,17 +95,18 @@ public class TestCommand extends Command {
             widget.draw();
         }
         else if(args[0].equalsIgnoreCase("rect")){
-            RectangleWidget widget = new InteractableRectangleWidget(baseLocation, 10, 10);
+            RectangleWidget widget = new InteractableRectangleWidget(baseLocation, 50, 25);
             widgets.add(widget);
             widget.setRectangleRotation(0);
             widget.draw();
         }
         else if(args[0].equalsIgnoreCase("ray")){
-            //RaycastUtil.Ray3f ray = RaycastUtil.getPlayerLookRay(player);
-
             for(Widget widget : widgets) {
                 if(widget instanceof Interactable interactable) {
-                    if(interactable.isInside(player)) TextMenusPlugin.LOGGER.info("Interactable: {}", interactable);
+                    Vector2f screenUV = interactable.isInside(player);
+                    if(screenUV != null) {
+                        player.sendMessage(Component.text(screenUV.toString()));
+                    }
                 }
             }
 
