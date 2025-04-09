@@ -64,32 +64,39 @@ public class RaycastUtility {
      * @return Vector2f of the localspace point the player clicked
      * */
     public static @Nullable Vector2f lookingAt(Player player, Location displayLocation, Matrix4f plane, FloatRange xRange, FloatRange yRange) {
-
+        //Building player raycast
         Location eye = player.getEyeLocation();
         Vector3f rayOrigin = eye.toVector().toVector3f();
         Vector3f rayDirection = eye.getDirection().normalize().toVector3f();
 
+
+        //Defining the plane - plane point being the 0,0 location, plane normal being the vector pointing perpendicular to the plane
         Vector3f planePoint = displayLocation.toVector().toVector3f();
         Vector3f planeNormal = displayLocation.getDirection().normalize().toVector3f();
 
+        //Is the dot product of the normal very small? It's likely the player is looking perpendicular to the screen
         float denom = rayDirection.dot(planeNormal);
-
         if(Math.abs(denom) < 1e-6) { return null; }
 
+
+        //Where along the ray does the intersection occur?
         Vector3f difference = new Vector3f(planePoint).sub(rayOrigin);
         float t = difference.dot(planeNormal)/denom;
         if(t < 0){
             return null;
         }
 
+        //Intersection point between the player ray and the plane
         Vector3f intersectionPoint = new Vector3f(rayOrigin).add(new Vector3f(rayDirection).mul(t));
 
+        //Converting to local coordinates
         Vector3f hitVector = new Vector3f(
                 (float)(intersectionPoint.x() - displayLocation.getX()),
                 (float)(intersectionPoint.y() - displayLocation.getY()),
                 (float)(intersectionPoint.z() - displayLocation.getZ())
         );
 
+        //Adjusting for the Yaw of the Text Display
         float yawRadians = (float) Math.toRadians(-displayLocation.getYaw());
         float cos = (float) Math.cos(yawRadians);
         float sin = (float) Math.sin(yawRadians);
@@ -99,8 +106,8 @@ public class RaycastUtility {
 
         Vector2f localPoints = new Vector2f(localPointX, localPointY);
 
-        TextMenusPlugin.LOGGER.info("localPoints: {}", localPoints);
 
+        //Checking if the intersection point is within our defined bounds
         if(xRange.contains(localPoints.x) && yRange.contains(localPoints.y)) {
             return new Vector2f(localPoints.x(), localPoints.y());
         }
