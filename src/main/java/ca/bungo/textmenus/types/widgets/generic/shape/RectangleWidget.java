@@ -9,6 +9,7 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.entity.CraftTextDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;

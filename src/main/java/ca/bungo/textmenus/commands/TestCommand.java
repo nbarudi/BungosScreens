@@ -95,7 +95,7 @@ public class TestCommand extends Command {
             widget.draw();
         }
         else if(args[0].equalsIgnoreCase("rect")){
-            RectangleWidget widget = new InteractableRectangleWidget(baseLocation, 50, 25);
+            RectangleWidget widget = new InteractableRectangleWidget(baseLocation, 10, 10);
             widgets.add(widget);
             widget.setRectangleRotation(0);
             widget.draw();

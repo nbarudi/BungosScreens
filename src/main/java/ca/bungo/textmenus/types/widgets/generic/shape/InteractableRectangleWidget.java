@@ -1,5 +1,6 @@
 package ca.bungo.textmenus.types.widgets.generic.shape;
 
+import ca.bungo.textmenus.TextMenusPlugin;
 import ca.bungo.textmenus.types.Interactable;
 import ca.bungo.textmenus.types.widgets.HorizontalPivot;
 import ca.bungo.textmenus.types.widgets.VerticalPivot;
@@ -23,7 +24,7 @@ public class InteractableRectangleWidget extends RectangleWidget implements Inte
     BukkitTask BBDisplay;
     public InteractableRectangleWidget(Location baseLocation, float width, float height) {
         super(baseLocation, width, height);
-        this.setHorizontalPivot(HorizontalPivot.LEFT);
+        this.setHorizontalPivot(HorizontalPivot.RIGHT);
         this.setVerticalPivot(VerticalPivot.BOTTOM);
 
         boundingBox = new BoundingBox();

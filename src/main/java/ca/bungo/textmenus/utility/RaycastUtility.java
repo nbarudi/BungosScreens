@@ -1,12 +1,13 @@
 package ca.bungo.textmenus.utility;
 
 import ca.bungo.textmenus.TextMenusPlugin;
+import com.mojang.math.Transformation;
+import io.papermc.paper.configuration.transformation.Transformations;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Transformation;
 import org.joml.*;
 
 import javax.annotation.Nullable;
@@ -69,10 +70,13 @@ public class RaycastUtility {
         Vector3f rayOrigin = eye.toVector().toVector3f();
         Vector3f rayDirection = eye.getDirection().normalize().toVector3f();
 
-
         //Defining the plane - plane point being the 0,0 location, plane normal being the vector pointing perpendicular to the plane
         Vector3f planePoint = displayLocation.toVector().toVector3f();
         Vector3f planeNormal = displayLocation.getDirection().normalize().toVector3f();
+
+        //Offsetting everything to make the planes pivot point to be 0,0
+        rayOrigin = new Vector3f(rayOrigin).sub(planePoint);
+        planePoint = new Vector3f(planePoint).sub(planePoint);
 
         //Is the dot product of the normal very small? It's likely the player is looking perpendicular to the screen
         float denom = rayDirection.dot(planeNormal);
@@ -89,23 +93,15 @@ public class RaycastUtility {
         //Intersection point between the player ray and the plane
         Vector3f intersectionPoint = new Vector3f(rayOrigin).add(new Vector3f(rayDirection).mul(t));
 
-        //Converting to local coordinates
-        Vector3f hitVector = new Vector3f(
-                (float)(intersectionPoint.x() - displayLocation.getX()),
-                (float)(intersectionPoint.y() - displayLocation.getY()),
-                (float)(intersectionPoint.z() - displayLocation.getZ())
-        );
-
         //Adjusting for the Yaw of the Text Display
         float yawRadians = (float) Math.toRadians(-displayLocation.getYaw());
         float cos = (float) Math.cos(yawRadians);
         float sin = (float) Math.sin(yawRadians);
 
-        float localPointX = hitVector.x * cos - hitVector.z * sin;
-        float localPointY = hitVector.y;
+        float localPointX = intersectionPoint.x * cos - intersectionPoint.z * sin;
+        float localPointY = intersectionPoint.y;
 
         Vector2f localPoints = new Vector2f(localPointX, localPointY);
-
 
         //Checking if the intersection point is within our defined bounds
         if(xRange.contains(localPoints.x) && yRange.contains(localPoints.y)) {

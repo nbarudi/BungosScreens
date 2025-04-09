@@ -17,7 +17,7 @@ public interface Widget {
         display.text(Component.text(" "));
         display.setBillboard(Display.Billboard.FIXED);
         display.setPersistent(false);
-        display.setAlignment(TextDisplay.TextAlignment.LEFT);
+        display.setAlignment(TextDisplay.TextAlignment.CENTER);
         display.setBackgroundColor(Color.BLACK);
         return display;
     }
@@ -27,7 +27,7 @@ public interface Widget {
         display.text(Component.text(" "));
         display.setBillboard(Display.Billboard.FIXED);
         display.setPersistent(true);
-        display.setAlignment(TextDisplay.TextAlignment.LEFT);
+        display.setAlignment(TextDisplay.TextAlignment.CENTER);
         display.setBackgroundColor(Color.BLACK);
         return display;
     }
